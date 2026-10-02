@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meu perfil — BiteFeed</title>
+<style>
+:root{--bg:#fff8f1;--card:#fff;--ink:#2a1a12;--mute:#7a6558;--brand:#e8541e;--star:#f5a300;--line:#f0dfd0;--ok:#2a9d5c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}}
+:root[data-theme="dark"]{--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+.w{max-width:640px;margin:0 auto;padding:0 16px 40px}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
+.logo{font-weight:800;font-size:20px}.logo b{color:var(--brand)}
+.me{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+.av{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#ffb703);color:#fff;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.me h1{margin:0;font-size:22px}.sm{color:var(--mute);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+.stat b{display:block;font-size:22px;color:var(--brand)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;margin:0 0 10px}
+.tb{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}.tb span:first-child{width:96px;flex:none}
+.tb i{display:block;height:8px;border-radius:9px;background:var(--brand)}.tb div{flex:1;background:var(--line);border-radius:9px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:14px;cursor:pointer}
+.chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer}
+.btn.o{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.v{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+.th{width:62px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
+.v h3{margin:0;font-size:16px}.v p{margin:6px 0;font-size:14px}
+.st{color:var(--star);letter-spacing:1px;font-size:16px;cursor:pointer}.st u{text-decoration:none;color:var(--line)}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:12px;color:var(--mute);margin-right:4px}
+.tag.back{color:var(--ok);border-color:var(--ok)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lk{background:none;border:0;color:var(--brand);font-size:13px;cursor:pointer;padding:0;font-weight:600}
+select,textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px;font:inherit;margin:6px 0}
+textarea{min-height:70px;resize:vertical}
+.big{font-size:30px;letter-spacing:4px}
+.empty{text-align:center;color:var(--mute);padding:24px}
+</style>
+</head>
+<body>
+<div class="w">
+<header><div class="logo">Bite<b>Feed</b></div><span class="sm">Meu perfil</span></header>
+
+<div class="me"><div class="av">MC</div><div><h1>Mariana Costa</h1><div class="sm">São Paulo · no BiteFeed desde jun/2026</div><div style="margin-top:6px"><span class="tag">pet friendly</span><span class="tag">vegetariano</span><span class="tag">vibe animada</span></div></div></div>
+
+<div class="stats" id="stats"></div>
+<div class="box"><h2>Meu paladar</h2><div id="taste"></div></div>
+
+<div class="chips" id="chips"></div>
+<div id="list"></div>
+
+<div class="box" id="form" hidden>
+<h2 id="ft">Registrar visita</h2>
+<select id="rs"></select>
+<div class="big st" id="fs"></div>
+<textarea id="fc" placeholder="Como foi? Prato, atendimento, preço, vibe..."></textarea>
+<label class="sm"><input type="checkbox" id="fb"> Voltaria com certeza</label>
+<div style="margin-top:10px"><button class="btn" id="save">Salvar</button> <button class="btn o" id="cancel">Cancelar</button></div>
+</div>
+</div>
+
+<script>
+var RS={
+"Cantina Nonna Lia":["🍝","Italiana","#c2410c,#f59e0b"],"Beco do Smash":["🍔","Hambúrguer","#b91c1c,#fb7185"],"Izakaya Hana":["🍢","Japonesa","#1d4ed8,#22d3ee"],"Verde Vivo":["🥗","Vegana","#15803d,#a3e635"],"Boteco do Zé":["🍺","Brasileira","#a16207,#fde047"],"Pizzaria Fornalha":["🍕","Italiana","#9a3412,#fdba74"],"Sushi Aoi":["🍣","Japonesa","#0f766e,#5eead4"],"Café Lírio":["🥐","Café & Brunch","#7c3aed,#f0abfc"]};
+var D=[
+{id:1,r:"Verde Vivo",d:"2026-09-27",s:5,c:"Moqueca de palmito incrível e o ambiente com plantas é lindo. Levei o cachorro e foi super bem recebido.",b:1,m:"Bowl da casa · R$ 46"},
+{id:2,r:"Beco do Smash",d:"2026-09-19",s:4,c:"Smash duplo no ponto, fila andou rápido. A batata poderia ser mais crocante.",b:1,m:"Smash duplo · R$ 32"},
+{id:3,r:"Cantina Nonna Lia",d:"2026-09-06",s:5,c:"Jantar de aniversário. Risoto de cogumelos e tiramisù perfeitos, preço justo pelo que entrega.",b:1,m:"Risoto de cogumelos · R$ 66"},
+{id:4,r:"Izakaya Hana",d:"2026-08-23",s:3,c:"Yakitori ótimo, mas o barulho dificultou conversar e a conta saiu mais alta que o esperado.",b:0,m:"Yakitori misto · R$ 54"},
+{id:5,r:"Café Lírio",d:"2026-08-09",s:4,c:"Brunch gostoso na varanda. Ovos beneditinos cremosos; vale chegar cedo.",b:1,m:"Ovos beneditinos · R$ 36"},
+{id:6,r:"Boteco do Zé",d:"2026-07-14",s:2,c:"Chopp bom, mas o frango veio frio e demorou. Não voltaria tão cedo.",b:0,m:"Frango à passarinho · R$ 42"}];
+var F="all",E=null,fs=0,N=7;
+try{var sv=localStorage.getItem('bf_hist');if(sv){D=JSON.parse(sv)}}catch(e){}
+function persist(){try{localStorage.setItem('bf_hist',JSON.stringify(D))}catch(e){}}
+function stars(n,id){var h='';for(var i=1;i<=5;i++)h+=i<=n?'★':'<u>★</u>';return h}
+function fd(d){var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0]}
+function stats(){var n=D.length,avg=n?(D.reduce(function(a,x){return a+x.s},0)/n).toFixed(1):'–',u={};D.forEach(function(x){u[x.r]=1});
+document.getElementById('stats').innerHTML='<div class="stat"><b>'+n+'</b><span class="sm">visitas</span></div><div class="stat"><b>'+avg+' ★</b><span class="sm">nota média</span></div><div class="stat"><b>'+Object.keys(u).length+'</b><span class="sm">lugares</span></div>';
+var c={};D.forEach(function(x){var k=RS[x.r][1];c[k]=c[k]||[0,0];c[k][0]+=x.s;c[k][1]++});
+var a=Object.keys(c).map(function(k){return[k,c[k][0]/c[k][1],c[k][1]]}).sort(function(x,y){return y[1]-x[1]});
+document.getElementById('taste').innerHTML=a.map(function(x){return '<div class="tb"><span>'+x[0]+'</span><div><i style="width:'+x[1]/5*100+'%"></i></div><span>'+x[1].toFixed(1)+' ★ ('+x[2]+')</span></div>'}).join('')||'<span class="sm">Sem dados ainda.</span>'}
+function chips(){var o=[["all","Todas"],["5","5 ★"],["back","Voltaria"],["low","Não voltaria"]];
+document.getElementById('chips').innerHTML=o.map(function(x){return '<button class="chip'+(F===x[0]?' on':'')+'" data-f="'+x[0]+'">'+x[1]+'</button>'}).join('')+'<span style="flex:1"></span><button class="btn" id="add">+ Registrar visita</button>';
+Array.prototype.forEach.call(document.querySelectorAll('.chip'),function(b){b.onclick=function(){F=b.dataset.f;chips();list()}});
+document.getElementById('add').onclick=function(){open_(null)}}
+function list(){var L=D.slice().sort(function(a,b){return b.d<a.d?-1:1}).filter(function(x){return F==='all'||(F==='5'&&x.s===5)||(F==='back'&&x.b)||(F==='low'&&!x.b)});
+document.getElementById('list').innerHTML=L.length?L.map(function(x){var r=RS[x.r];return '<div class="v"><div class="th" style="background:linear-gradient(135deg,'+r[2]+')">'+r[0]+'</div><div style="flex:1;min-width:0"><div class="row"><h3>'+x.r+'</h3><span class="sm">'+fd(x.d)+'</span></div><div class="st">'+stars(x.s)+'</div><p>“'+x.c+'”</p><div class="row"><div><span class="tag">'+r[1]+'</span>'+(x.b?'<span class="tag back">voltaria</span>':'')+(x.m?'<span class="tag">'+x.m+'</span>':'')+'</div><button class="lk" data-e="'+x.id+'">Editar</button></div></div></div>'}).join(''):'<div class="empty">Nenhuma visita neste filtro.</div>';
+Array.prototype.forEach.call(document.querySelectorAll('.lk'),function(b){b.onclick=function(){open_(+b.dataset.e)}})}
+function drawFs(){var h='';for(var i=1;i<=5;i++)h+='<span data-n="'+i+'">'+(i<=fs?'★':'<u>★</u>')+'</span>';var e=document.getElementById('fs');e.innerHTML=h;Array.prototype.forEach.call(e.children,function(s){s.onclick=function(){fs=+s.dataset.n;drawFs()}})}
+function open_(id){E=id;var x=D.filter(function(d){return d.id===id})[0];
+var sel=document.getElementById('rs');sel.innerHTML=Object.keys(RS).map(function(k){return '<option>'+k+'</option>'}).join('');
+if(x){sel.value=x.r;sel.disabled=true;fs=x.s;document.getElementById('fc').value=x.c;document.getElementById('fb').checked=!!x.b;document.getElementById('ft').textContent='Editar avaliação'}
+else{sel.disabled=false;fs=0;document.getElementById('fc').value='';document.getElementById('fb').checked=false;document.getElementById('ft').textContent='Registrar visita'}
+drawFs();var f=document.getElementById('form');f.hidden=false;f.scrollIntoView({behavior:'smooth',block:'center'})}
+document.getElementById('cancel').onclick=function(){document.getElementById('form').hidden=true};
+document.getElementById('save').onclick=function(){if(!fs){alert('Escolha uma nota de 1 a 5.');return}
+var c=document.getElementById('fc').value.trim()||'Sem comentário.',b=document.getElementById('fb').checked?1:0;
+if(E){D.forEach(function(x){if(x.id===E){x.s=fs;x.c=c;x.b=b}})}
+else{var t=new Date().toISOString().slice(0,10);D.push({id:Date.now(),r:document.getElementById('rs').value,d:t,s:fs,c:c,b:b,m:''})}
+persist();document.getElementById('form').hidden=true;stats();list()};
+stats();chips();list();
+</script>
+</body>
+</html>
