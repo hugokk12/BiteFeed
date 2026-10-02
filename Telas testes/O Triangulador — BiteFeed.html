@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O Triangulador — BiteFeed</title>
+<style>
+:root{--bg:#fff8f1;--card:#fff;--ink:#2a1a12;--mute:#7a6558;--brand:#e8541e;--line:#f0dfd0;--ok:#2a9d5c;--no:#d62839;--maybe:#e9a100;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}}
+:root[data-theme="dark"]{--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column;align-items:center;overflow-x:hidden}
+header{width:100%;max-width:440px;padding:14px 18px 6px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:20px}.logo b{color:var(--brand)}
+#cnt{font-size:13px;color:var(--mute)}
+.bar{width:calc(100% - 36px);max-width:404px;height:5px;background:var(--line);border-radius:9px;margin-bottom:10px}
+.bar div{height:100%;width:0;background:var(--brand);border-radius:9px;transition:width .3s}
+.stage{position:relative;width:calc(100% - 36px);max-width:404px;height:min(560px,calc(100vh - 230px));min-height:420px}
+.card{position:absolute;inset:0;background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;touch-action:none;user-select:none;box-shadow:0 10px 30px rgba(0,0,0,.12);will-change:transform}
+.card.back{transform:scale(.95) translateY(12px);opacity:.7;pointer-events:none}
+.photo{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center;font-size:110px}
+.photo .e{filter:drop-shadow(0 8px 12px rgba(0,0,0,.3))}
+.badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.5);color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700}
+.price{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700}
+.info{padding:14px 16px 16px}
+.info h2{margin:0;font-size:22px}.meta{color:var(--mute);font-size:13px;margin:2px 0 8px}
+.info p{margin:0 0 8px;font-size:14px;line-height:1.4}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px 3px 0 0;color:var(--mute)}
+.dots{position:absolute;top:8px;left:12px;right:12px;display:flex;gap:4px}.dots i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.4)}.dots i.on{background:#fff}.cap{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 10px;background:linear-gradient(transparent,rgba(0,0,0,.65));color:#fff;display:flex;justify-content:space-between;align-items:flex-end;font-weight:700;font-size:15px}.cap b{background:var(--brand);border-radius:999px;padding:3px 11px;font-size:14px}.photo{cursor:pointer}.badge{top:20px!important}.price{top:20px!important}.dish{display:flex;justify-content:space-between;font-size:13px;border-top:1px dashed var(--line);margin-top:8px;padding-top:8px}
+.stamp{position:absolute;top:26px;font-size:26px;font-weight:900;border:4px solid;border-radius:10px;padding:2px 12px;opacity:0;transform:rotate(-12deg);background:rgba(255,255,255,.85)}
+.s-yes{left:18px;color:var(--ok);border-color:var(--ok)}.s-no{right:18px;color:var(--no);border-color:var(--no);transform:rotate(12deg)}
+.s-mb{left:50%;margin-left:-50px;color:var(--maybe);border-color:var(--maybe);top:60px;transform:none}
+.acts{display:flex;gap:14px;margin:18px 0 8px;align-items:flex-start}
+.a{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;color:var(--mute);font-size:12px;cursor:pointer;font-weight:600}
+.a span{width:62px;height:62px;border-radius:50%;background:var(--card);border:2px solid;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.a.no span{border-color:var(--no)}.a.mb span{border-color:var(--maybe);width:52px;height:52px;font-size:22px;margin-top:5px}.a.yes span{border-color:var(--ok)}
+.a:active span{transform:scale(.92)}
+.hint{font-size:12px;color:var(--mute);margin-bottom:12px}
+.end{width:calc(100% - 36px);max-width:404px;padding-bottom:30px}
+.end h2{margin:6px 0 2px}.end .s{color:var(--mute);margin:0 0 14px}
+.res{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px}
+.th{width:60px;height:60px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
+.pct{margin-left:auto;min-width:58px;height:58px;border-radius:50%;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--line) 0);display:flex;align-items:center;justify-content:center;position:relative;font-weight:800;font-size:13px;flex:none}
+.pct::after{content:"";position:absolute;inset:6px;background:var(--card);border-radius:50%}.pct span{position:relative;z-index:1}
+.rank{font-weight:800;color:var(--brand);font-size:18px;width:20px}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:15px;cursor:pointer;margin:6px 6px 0 0}
+.btn.o{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.sm{font-size:12px;color:var(--mute)}
+</style>
+</head>
+<body>
+<header><div class="logo">Bite<b>Feed</b> · Triangulador</div><div id="cnt"></div></header>
+<div class="bar"><div id="pg"></div></div>
+<div class="stage" id="stage"></div>
+<div class="acts" id="acts">
+<button class="a no" data-v="no"><span>✕</span>Não é para mim</button>
+<button class="a mb" data-v="mb"><span>🤔</span>Talvez</button>
+<button class="a yes" data-v="yes"><span>🔥</span>Minha vibe</button>
+</div>
+<div class="hint" id="hint">Toque na foto para ver ambiente e pratos · Arraste: direita = minha vibe · cima = talvez · esquerda = não</div>
+<div class="end" id="end" hidden></div>
+
+<script>
+var R=[
+{n:"Cantina Nonna Lia",c:"Italiana",v:"Romântico",b:2,e:"🍝",g:"#c2410c,#f59e0b",t:["pet friendly","vegetariano"],d:"Massa fresca feita na hora, luz baixa e mesa na calçada. Perfeito para jantar a dois.",f:[["🕯️","Ambiente: salão e calçada"],["🍝","Rigatoni ao sugo","R$ 58"],["🍄","Risoto de cogumelos","R$ 66"],["🍰","Tiramisù","R$ 28"]],p:["Rigatoni ao sugo","R$ 58"],k:"1,2 km"},
+{n:"Beco do Smash",c:"Hambúrguer",v:"Animado",b:1,e:"🍔",g:"#b91c1c,#fb7185",t:["rápido","casual"],d:"Smash burger crocante, trilha rock e fila que anda rápido. Ótimo para rolê com a galera.",f:[["🏪","Ambiente: balcão e mesas"],["🍔","Smash duplo","R$ 32"],["🍟","Batata rústica","R$ 18"],["🥤","Milkshake","R$ 24"]],p:["Smash duplo","R$ 32"],k:"600 m"},
+{n:"Izakaya Hana",c:"Japonesa",v:"Animado",b:3,e:"🍢",g:"#1d4ed8,#22d3ee",t:["para grupos","drinks"],d:"Espetinhos na brasa, saquê e mesas compartilhadas. Bom para grupos grandes.",f:[["🏮","Ambiente: mesas compartilhadas"],["🍢","Yakitori misto","R$ 54"],["🥟","Gyoza","R$ 38"],["🐟","Sashimi 12un","R$ 92"]],p:["Yakitori misto","R$ 54"],k:"2,4 km"},
+{n:"Verde Vivo",c:"Vegana",v:"Tranquilo",b:2,e:"🥗",g:"#15803d,#a3e635",t:["vegano","sem glúten","pet friendly"],d:"Cozinha vegana com ingredientes locais, ambiente arejado e cheio de plantas.",f:[["🌿","Ambiente: varanda com plantas"],["🥗","Bowl da casa","R$ 46"],["🍲","Moqueca de palmito","R$ 62"],["🍫","Brownie vegano","R$ 22"]],p:["Bowl da casa","R$ 46"],k:"900 m"},
+{n:"Boteco do Zé",c:"Brasileira",v:"Tranquilo",b:1,e:"🍺",g:"#a16207,#fde047",t:["porções","casual","aberto segunda"],d:"Boteco raiz com chopp gelado e petiscos. Aberto às segundas, quando tudo fecha.",f:[["🍻","Ambiente: balcão do boteco"],["🧆","Bolinho de feijoada","R$ 34"],["🍗","Frango à passarinho","R$ 42"],["🍺","Chopp 300ml","R$ 12"]],p:["Bolinho de feijoada","R$ 34"],k:"1,8 km"},
+{n:"Pizzaria Fornalha",c:"Italiana",v:"Animado",b:2,e:"🍕",g:"#9a3412,#fdba74",t:["para grupos","vegetariano"],d:"Pizza napolitana no forno a lenha, rodízio de sabores doces no final.",f:[["🔥","Ambiente: forno a lenha"],["🍕","Margherita","R$ 52"],["🌶️","Pizza calabresa","R$ 58"],["🍫","Pizza doce de Nutella","R$ 48"]],p:["Margherita","R$ 52"],k:"1,1 km"},
+{n:"Sushi Aoi",c:"Japonesa",v:"Romântico",b:3,e:"🍣",g:"#0f766e,#5eead4",t:["balcão omakase","drinks"],d:"Balcão para 12 lugares, menu degustação e atendimento do chef.",f:[["🍶","Ambiente: balcão de 12 lugares"],["🍣","Omakase 10 etapas","R$ 220"],["🍙","Temaki de salmão","R$ 38"],["🍡","Mochi da casa","R$ 26"]],p:["Omakase 10 etapas","R$ 220"],k:"3,0 km"},
+{n:"Café Lírio",c:"Café & Brunch",v:"Tranquilo",b:1,e:"🥐",g:"#7c3aed,#f0abfc",t:["pet friendly","vegetariano","wi-fi"],d:"Brunch o dia todo, pão de fermentação natural e mesas na varanda.",f:[["☕","Ambiente: varanda do café"],["🥐","Ovos beneditinos","R$ 36"],["🥞","Panquecas americanas","R$ 34"],["🥑","Torrada de abacate","R$ 32"]],p:["Ovos beneditinos","R$ 36"],k:"500 m"}];
+var i=0,W={},V=[],stage=document.getElementById('stage');
+function bump(r,w){["c","v"].forEach(function(k){W[r[k]]=(W[r[k]]||0)+w});W["$"+r.b]=(W["$"+r.b]||0)+w;r.t.forEach(function(x){W[x]=(W[x]||0)+w})}
+function card(r,back){var d=document.createElement('div');d.className='card'+(back?' back':'');
+d.innerHTML='<div class="photo" style="background:linear-gradient(135deg,'+r.g+')"><div class="dots"></div><span class="e"></span><span class="cap"></span><span class="badge">▶ vídeo real de cliente</span><span class="price">'+"$".repeat(r.b)+'</span></div><div class="info"><h2>'+r.n+'</h2><div class="meta">'+r.c+' · '+r.v+' · '+r.k+'</div><p>'+r.d+'</p><div>'+r.t.map(function(x){return '<span class="tag">'+x+'</span>'}).join('')+'</div><div class="dish"><span>Toque na foto para ver os pratos →</span><b>'+r.f.length+' fotos</b></div></div><div class="stamp s-yes">MINHA VIBE</div><div class="stamp s-no">NÃO</div><div class="stamp s-mb">TALVEZ</div>';c0(d,r);return d}
+function c0(d,r){d._r=r;d._k=0;setPh(d)}
+function setPh(d){var r=d._r,k=d._k,f=r.f[k],a=[135,45,225,315][k%4],g=r.g.split(',');var p=d.querySelector('.photo');p.style.background='linear-gradient('+a+'deg,'+(k%2?g[1]+','+g[0]:g[0]+','+g[1])+')';d.querySelector('.e').textContent=f[0];d.querySelector('.e').style.fontSize=k?'120px':'96px';d.querySelector('.cap').innerHTML='<span>'+f[1]+'</span>'+(f[2]?'<b>'+f[2]+'</b>':'');d.querySelector('.dots').innerHTML=r.f.map(function(_,j){return '<i class="'+(j===k?'on':'')+'"></i>'}).join('')}
+function render(){stage.innerHTML='';
+document.getElementById('pg').style.width=(i/R.length*100)+'%';
+document.getElementById('cnt').textContent=Math.min(i+1,R.length)+' / '+R.length;
+if(i>=R.length)return finish();
+if(i+1<R.length)stage.appendChild(card(R[i+1],true));
+var c=card(R[i]);stage.appendChild(c);drag(c)}
+function vote(v,c){var r=R[i],w=v==='yes'?2:v==='mb'?1:-1;bump(r,w);V.push({r:r,v:v});
+var x=v==='yes'?600:v==='no'?-600:0,y=v==='mb'?-700:0;
+c.style.transition='transform .3s,opacity .3s';c.style.transform='translate('+x+'px,'+y+'px) rotate('+(x/20)+'deg)';c.style.opacity='0';
+setTimeout(function(){i++;render()},230)}
+function drag(c){var sx,sy,dx=0,dy=0,on=false,y=c.querySelector('.s-yes'),n=c.querySelector('.s-no'),m=c.querySelector('.s-mb');
+c.onpointerdown=function(e){on=true;sx=e.clientX;sy=e.clientY;c.setPointerCapture(e.pointerId);c.style.transition='none'};
+c.onpointermove=function(e){if(!on)return;dx=e.clientX-sx;dy=e.clientY-sy;
+c.style.transform='translate('+dx+'px,'+dy+'px) rotate('+dx/18+'deg)';
+var up=dy<-60&&Math.abs(dx)<80;y.style.opacity=up?0:Math.max(0,dx/100);n.style.opacity=up?0:Math.max(0,-dx/100);m.style.opacity=up?Math.min(1,-dy/100):0};
+c.onpointerup=function(e){if(!on)return;on=false;
+if(Math.abs(dx)<8&&Math.abs(dy)<8){var pr=c.querySelector('.photo').getBoundingClientRect();if(e.clientY>=pr.top&&e.clientY<=pr.bottom){var L=c._r.f.length;c._k=e.clientX<pr.left+pr.width*.4?(c._k+L-1)%L:(c._k+1)%L;setPh(c)}dx=dy=0;return}
+
+if(dy<-90&&Math.abs(dx)<90)return vote('mb',c);
+if(dx>90)return vote('yes',c);if(dx<-90)return vote('no',c);
+c.style.transition='transform .25s';c.style.transform='';y.style.opacity=n.style.opacity=m.style.opacity=0;dx=dy=0}}
+document.getElementById('acts').onclick=function(e){var b=e.target.closest('.a');if(!b||i>=R.length)return;var c=stage.lastChild;
+var s=c.querySelector({yes:'.s-yes',no:'.s-no',mb:'.s-mb'}[b.dataset.v]);s.style.opacity=1;vote(b.dataset.v,c)};
+document.onkeydown=function(e){if(i>=R.length)return;var k={ArrowRight:'yes',ArrowLeft:'no',ArrowUp:'mb'}[e.key];if(k)vote(k,stage.lastChild)};
+function match(r){var s=0,keys=[r.c,r.v,"$"+r.b].concat(r.t);keys.forEach(function(k){s+=W[k]||0});
+var max=0;V.forEach(function(x){});return s}
+function finish(){document.getElementById('acts').hidden=true;document.getElementById('hint').hidden=true;
+var sc=R.map(function(r){var v=V.filter(function(x){return x.r===r})[0];return{r:r,s:match(r)+(v&&v.v==='yes'?3:v&&v.v==='mb'?1:v?-3:0),v:v&&v.v}}).filter(function(x){return x.v!=='no'});
+sc.sort(function(a,b){return b.s-a.s});var top=sc.slice(0,3);
+if(!top.length){document.getElementById('end').hidden=false;document.getElementById('end').innerHTML='<h2>Nenhum match 😅</h2><p class="s">Você recusou todos. Que tal tentar de novo com a mente aberta?</p><button class="btn" onclick="reset()">Recomeçar</button>';return}
+var hi=Math.max(top[0].s,1);
+document.getElementById('end').hidden=false;
+document.getElementById('end').innerHTML='<h2>Seus finalistas 🎯</h2><p class="s">Compartilhe com o grupo e decidam em minutos.</p>'+top.map(function(x,n){var p=Math.max(35,Math.min(98,Math.round(x.s/hi*(98-n*4))));return '<div class="res"><div class="rank">'+(n+1)+'</div><div class="th" style="background:linear-gradient(135deg,'+x.r.g+')">'+x.r.e+'</div><div><b>'+x.r.n+'</b><div class="sm">'+x.r.c+' · '+x.r.p[0]+' '+x.r.p[1]+'</div><div class="sm">'+(x.v==='yes'?'🔥 Minha vibe':'🤔 Talvez')+'</div></div><div class="pct" style="--p:'+p+'"><span>'+p+'%</span></div></div>'}).join('')+'<button class="btn" onclick="reset()">Jogar de novo</button><button class="btn o" onclick="navigator.share&&navigator.share({title:\'BiteFeed\',text:\'Meu match: '+top[0].r.n+'\'})">Compartilhar</button>'}
+function reset(){i=0;W={};V=[];document.getElementById('end').hidden=true;document.getElementById('acts').hidden=false;document.getElementById('hint').hidden=false;render()}
+render();
+</script>
+</body>
+</html>

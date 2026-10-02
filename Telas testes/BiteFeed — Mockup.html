@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BiteFeed — Onde comer, resolvido em 30 segundos</title>
+<style>
+:root{--bg:#fff8f1;--card:#fff;--ink:#2a1a12;--mute:#7a6558;--brand:#e8541e;--brand2:#ffb703;--line:#f0dfd0;--ok:#2a9d5c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}}
+:root[data-theme="dark"]{--bg:#1a120e;--card:#271b15;--ink:#fbeee3;--mute:#c2a998;--line:#3d2b21}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+.w{max-width:960px;margin:0 auto;padding:0 18px}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 0}
+.logo{font-weight:800;font-size:22px}.logo b{color:var(--brand)}
+nav a{color:var(--mute);text-decoration:none;margin-left:16px;font-size:14px}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:999px;padding:12px 22px;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.o{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.hero{padding:36px 0 28px;text-align:center}
+.hero h1{font-size:clamp(30px,6vw,52px);line-height:1.1;margin:0 0 14px}
+.hero h1 span{color:var(--brand)}
+.hero p{color:var(--mute);max-width:560px;margin:0 auto 22px;font-size:18px}
+.stats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px}
+.stat b{display:block;font-size:22px;color:var(--brand)}.stat small{color:var(--mute)}
+section{padding:34px 0}
+h2{font-size:28px;margin:0 0 6px}.sub{color:var(--mute);margin:0 0 20px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pad{padding:16px}
+.thumb{height:130px;display:flex;align-items:flex-end;justify-content:space-between;padding:10px;color:#fff;font-size:12px;font-weight:700}
+.thumb i{background:rgba(0,0,0,.45);border-radius:999px;padding:3px 9px;font-style:normal}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px 3px 0 0;color:var(--mute)}
+.steps .n{width:34px;height:34px;border-radius:50%;background:var(--brand2);color:#2a1a12;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.quiz{max-width:560px;margin:0 auto;padding:22px}
+.bar{height:6px;background:var(--line);border-radius:9px;margin-bottom:18px}.bar div{height:100%;background:var(--brand);border-radius:9px;width:0;transition:width .3s}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opt{background:var(--bg);border:2px solid var(--line);color:var(--ink);border-radius:12px;padding:13px;font-size:16px;text-align:left;cursor:pointer}
+.opt:hover{border-color:var(--brand)}
+.res{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px;background:var(--bg)}
+.pct{min-width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--line) 0);display:flex;align-items:center;justify-content:center;position:relative;font-weight:800}
+.pct::after{content:"";position:absolute;inset:6px;background:var(--card);border-radius:50%}.pct span{position:relative;z-index:1;font-size:14px}
+.menu{list-style:none;padding:0;margin:8px 0 0;font-size:14px}
+.menu li{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding:4px 0}
+.b2b{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+.price{font-size:30px;font-weight:800;color:var(--brand)}.price small{font-size:14px;color:var(--mute);font-weight:400}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--mute);font-size:13px;text-align:center}
+.wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+<div class="w">
+<header><div class="logo">Bite<b>Feed</b></div><nav><a href="#feed">Feed</a><a href="#triangulador">Triangulador</a><a href="#restaurantes">Para restaurantes</a></nav></header>
+
+<div class="hero">
+<h1>Resolva a discussão de <span>onde comer</span> em 30 segundos</h1>
+<p>Vídeos reais de clientes, cardápios com preços transparentes e um quiz rápido que acaba com o “tanto faz, escolhe você”.</p>
+<a class="btn" href="#triangulador">Começar o quiz</a> <a class="btn o" href="#feed">Ver o feed</a>
+<div class="stats"><div class="stat"><b>+15 min</b><small>perdidos decidindo, hoje</small></div><div class="stat"><b>3–5</b><small>perguntas no quiz</small></div><div class="stat"><b>3</b><small>opções finalistas com Match %</small></div></div>
+</div>
+
+<section id="como"><h2>Como funciona</h2><p class="sub">Do impasse no WhatsApp à decisão em grupo.</p>
+<div class="grid steps">
+<div class="card pad"><div class="n">1</div><b>Compartilhe o link</b><p class="sub">Sem download: abre direto no navegador do celular.</p></div>
+<div class="card pad"><div class="n">2</div><b>Responda o quiz</b><p class="sub">Ocasião, orçamento, vibe e restrições do grupo.</p></div>
+<div class="card pad"><div class="n">3</div><b>Veja o Match %</b><p class="sub">Até 3 finalistas com vídeo real e cardápio.</p></div>
+<div class="card pad"><div class="n">4</div><b>Decidam</b><p class="sub">Consenso em minutos, sem fotos de IA.</p></div>
+</div></section>
+
+<section id="feed"><h2>Feed de experiências reais</h2><p class="sub">Mídias gravadas por clientes e criadores, não imagens promocionais. (Mockup com dados fictícios.)</p>
+<div class="grid" id="feedGrid"></div></section>
+
+<section id="triangulador"><h2 style="text-align:center">O Triangulador</h2><p class="sub" style="text-align:center">Quiz rápido para afunilar o gosto do grupo.</p>
+<div class="card quiz" id="quiz"></div></section>
+
+<section id="restaurantes"><h2>Para restaurantes</h2><p class="sub">Atraia clientes qualificados no momento pré-decisão.</p>
+<div class="b2b"><div class="grid">
+<div><b>Painel self-service</b><p class="sub">Atualize cardápio, preços, horários e tags de vibe (pet friendly, restrições alimentares).</p></div>
+<div><b>Métricas de cliques</b><p class="sub">Veja quantas vezes seu prato-chefe apareceu e foi escolhido no quiz.</p></div>
+<div><b>Destaque patrocinado</b><p class="sub">Posição de topo no Triangulador e banners de ocasiões especiais.</p></div>
+<div><div class="price">R$ 199<small> /mês (exemplo)</small></div><p class="sub">Plano SaaS mensal ou anual.</p><a class="btn" href="#">Quero ser parceiro</a></div>
+</div></div></section>
+</div>
+<footer>BiteFeed · Mockup acadêmico — FIAP MBA, Empreendedorismo e Inovação · dados ilustrativos</footer>
+
+<script>
+var R=[
+{n:"Cantina Nonna Lia",c:"Italiana",v:"romantico",b:2,t:["pet friendly","vegetariano"],g:"#c2410c,#f59e0b",p:"Rigatoni ao sugo",m:[["Rigatoni ao sugo","R$ 58"],["Risoto de cogumelos","R$ 66"],["Tiramisù","R$ 28"]]},
+{n:"Beco do Smash",c:"Hambúrguer",v:"animado",b:1,t:["rápido","casual"],g:"#b91c1c,#fb7185",p:"Smash duplo",m:[["Smash duplo","R$ 32"],["Batata rústica","R$ 18"],["Milkshake","R$ 24"]]},
+{n:"Izakaya Hana",c:"Japonesa",v:"animado",b:3,t:["para grupos","drinks"],g:"#1d4ed8,#22d3ee",p:"Yakitori misto",m:[["Yakitori misto","R$ 54"],["Gyoza","R$ 38"],["Sashimi 12un","R$ 92"]]},
+{n:"Verde Vivo",c:"Vegana",v:"tranquilo",b:2,t:["vegano","sem glúten","pet friendly"],g:"#15803d,#a3e635",p:"Bowl da casa",m:[["Bowl da casa","R$ 46"],["Moqueca de palmito","R$ 62"],["Brownie vegano","R$ 22"]]},
+{n:"Boteco do Zé",c:"Brasileira",v:"tranquilo",b:1,t:["porções","casual","aberto segunda"],g:"#a16207,#fde047",p:"Bolinho de feijoada",m:[["Bolinho de feijoada","R$ 34"],["Frango à passarinho","R$ 42"],["Chopp 300ml","R$ 12"]]}];
+var VL={romantico:"Romântico",animado:"Animado",tranquilo:"Tranquilo"};
+function card(r){return '<div class="card"><div class="thumb" style="background:linear-gradient(135deg,'+r.g+')"><i>▶ vídeo real</i><i>'+"$".repeat(r.b)+'</i></div><div class="pad"><b>'+r.n+'</b><div style="color:var(--mute);font-size:13px">'+r.c+' · '+VL[r.v]+'</div><div>'+r.t.map(function(x){return '<span class="tag">'+x+'</span>'}).join('')+'</div><ul class="menu">'+r.m.map(function(i){return '<li><span>'+i[0]+'</span><b>'+i[1]+'</b></li>'}).join('')+'</ul></div></div>'}
+document.getElementById('feedGrid').innerHTML=R.map(card).join('');
+var Q=[
+{q:"Qual é a ocasião?",k:"v",o:[["Encontro / aniversário","romantico"],["Rolê com a galera","animado"],["Algo sossegado","tranquilo"]]},
+{q:"Qual o orçamento por pessoa?",k:"b",o:[["Até R$ 40","1"],["R$ 40–80","2"],["Sem limite hoje","3"]]},
+{q:"Alguma restrição ou requisito?",k:"t",o:[["Vegano / vegetariano","vegano|vegetariano"],["Pet friendly","pet friendly"],["Nenhuma","-"]]},
+{q:"Que tipo de comida pede o grupo?",k:"c",o:[["Massas / italiana","Italiana"],["Hambúrguer / brasileira","Hambúrguer|Brasileira"],["Oriental","Japonesa"],["Surpreenda-me","-"]]}];
+var s=0,A={},qe=document.getElementById('quiz');
+function show(){
+if(s>=Q.length)return done();
+var q=Q[s];
+qe.innerHTML='<div class="bar"><div style="width:'+(s/Q.length*100)+'%"></div></div><small style="color:var(--mute)">Pergunta '+(s+1)+' de '+Q.length+'</small><h3 style="margin:4px 0 0">'+q.q+'</h3><div class="opts">'+q.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+o[0]+'</button>'}).join('')+'</div>';
+Array.prototype.forEach.call(qe.querySelectorAll('.opt'),function(b){b.onclick=function(){A[q.k]=q.o[+b.dataset.i][1];s++;show()}})}
+function score(r){var p=0,w=0,v;
+w+=30;if(A.v===r.v)p+=30;
+w+=30;var d=Math.abs(+A.b-r.b);p+=d===0?30:d===1?14:0;
+if(A.t&&A.t!=='-'){w+=20;if(A.t.split('|').some(function(x){return r.t.indexOf(x)>-1}))p+=20}
+if(A.c&&A.c!=='-'){w+=20;if(A.c.split('|').indexOf(r.c)>-1)p+=20}
+return Math.round(p/w*100)}
+function done(){
+var L=R.map(function(r){return{r:r,s:score(r)}}).sort(function(a,b){return b.s-a.s}).slice(0,3);
+qe.innerHTML='<div class="bar"><div style="width:100%"></div></div><h3 style="margin:0">Seus 3 finalistas</h3><small style="color:var(--mute)">Compartilhe no grupo e decidam!</small>'+L.map(function(x){return '<div class="res"><div class="pct" style="--p:'+x.s+'"><span>'+x.s+'%</span></div><div><b>'+x.r.n+'</b><div style="color:var(--mute);font-size:13px">'+x.r.c+' · prato-chefe: '+x.r.p+'</div></div></div>'}).join('')+'<p><button class="btn o" id="rs">Refazer o quiz</button></p>';
+document.getElementById('rs').onclick=function(){s=0;A={};show()}}
+show();
+</script>
+</body>
+</html>
